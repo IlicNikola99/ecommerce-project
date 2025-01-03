@@ -25,6 +25,9 @@ public class User {
     @Column(name = "username")
     private String username;
 
+    @Column(name = "profile_picture_link")
+    private String profilePictureLink;
+
     @Column(name = "oauth_id")
     private Integer oauthId;
 }
