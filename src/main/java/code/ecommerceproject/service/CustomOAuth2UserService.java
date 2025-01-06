@@ -2,6 +2,7 @@ package code.ecommerceproject.service;
 
 import code.ecommerceproject.dto.UserDto;
 import code.ecommerceproject.entity.User;
+import code.ecommerceproject.mapper.UserMapper;
 import code.ecommerceproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -41,11 +42,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         final UserDto userInfo = getGoogleUserInfo(oAuth2User);
 
         userRepository.findByEmail(userInfo.getEmail()).orElseGet(() -> {
-            final User newUser = new User();
-            newUser.setEmail(userInfo.getEmail());
-            newUser.setFirstName(userInfo.getFirstName());
-            newUser.setLastName(userInfo.getLastName());
-            newUser.setProfilePictureLink(userInfo.getProfilePictureLink());
+            final User newUser = UserMapper.Instance.toEntity(userInfo);
             return userRepository.save(newUser);
         });
     }
@@ -54,11 +51,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         final UserDto userInfo = getGithubUserInfo(oAuth2User);
 
         userRepository.findByOauthId(userInfo.getOauthId()).orElseGet(() -> {
-            final User newUser = new User();
-            newUser.setUsername(userInfo.getUsername());
-            newUser.setFirstName(userInfo.getFirstName());
-            newUser.setLastName(userInfo.getLastName());
-            newUser.setOauthId(userInfo.getOauthId());
+            final User newUser = UserMapper.Instance.toEntity(userInfo);
             return userRepository.save(newUser);
         });
     }
