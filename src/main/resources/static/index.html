@@ -44,7 +44,7 @@
         }
     });
     $(document).ready(function() {
-        $.get("api/user", function (data) {
+        $.get("/user", function (data) {
             if (data && data.name) {
                 $("#user").html(data.name);
                 $(".unauthenticated").hide();

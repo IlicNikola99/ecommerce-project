@@ -1,7 +1,5 @@
 package code.ecommerceproject.controller;
 
-import lombok.RequiredArgsConstructor;
-import org.mariadb.jdbc.MariaDbDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +10,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 @RestController
-@RequestMapping("/api/health")
+@RequestMapping("/health")
 public class HealthController {
 
     private final DataSource dataSource;

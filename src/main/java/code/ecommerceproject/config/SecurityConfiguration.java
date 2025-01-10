@@ -25,8 +25,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        //.requestMatchers("/","/api","/error", "/webjars/**").permitAll()  // Public access to specified paths
-                        .anyRequest().permitAll()  // Require authentication for other requests
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll()
                 )
                 .csrf(c -> c
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
