@@ -8,7 +8,7 @@ import lombok.Setter;
 @Table(name="address")
 @Getter
 @Setter
-public class Address {
+public class Address extends AbstractAuditingEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
