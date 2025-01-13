@@ -1,5 +1,6 @@
 package code.ecommerceproject.config;
 
+import code.ecommerceproject.service.CustomOAuth2SuccessHandler;
 import code.ecommerceproject.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +17,11 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 public class SecurityConfiguration {
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
 
-    public SecurityConfiguration(CustomOAuth2UserService customOAuth2UserService) {
+    public SecurityConfiguration(CustomOAuth2UserService customOAuth2UserService, CustomOAuth2SuccessHandler customOAuth2SuccessHandler) {
         this.customOAuth2UserService = customOAuth2UserService;
+        this.customOAuth2SuccessHandler = customOAuth2SuccessHandler;
     }
 
 
@@ -44,8 +47,8 @@ public class SecurityConfiguration {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
-                        .defaultSuccessUrl("http://localhost:4200", true) // Redirect to Angular app after login
                         .failureUrl("http://localhost:4200/login-failure") // Redirect to Angular app on failure
+                        .successHandler(customOAuth2SuccessHandler)
                         .failureHandler((request, response, exception) -> {
                             // Log the exception for debugging
                             System.err.println("Authentication failed: " + exception.getMessage());
