@@ -44,7 +44,7 @@
         }
     });
     $(document).ready(function() {
-        $.get("/user", function (data) {
+        $.get("/user/authenticated", function (data) {
             if (data && data.name) {
                 $("#user").html(data.name);
                 $(".unauthenticated").hide();

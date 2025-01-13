@@ -23,6 +23,6 @@ public class HealthController {
     @GetMapping()
     public String checkHealth() throws SQLException {
         Connection conn = dataSource.getConnection();
-        return "All OK, connected to database: " + conn.getCatalog();
+        return "Health OK, connected to database: " + conn.getCatalog();
     }
 }
