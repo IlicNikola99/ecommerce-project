@@ -36,11 +36,17 @@ spring:
             user-info-uri: https://api.github.com/user
           google:
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+
+server:
+  servlet:
+    session:
+      timeout: 30m
+
 application:
   cors:
     allowed-origins: http://localhost:4200
     allowed-methods: "*"
     allowed-headers: "*"
     exposed-headers: "*"
-    allow-credentials: false
+    allow-credentials: true
     max-age: 300
