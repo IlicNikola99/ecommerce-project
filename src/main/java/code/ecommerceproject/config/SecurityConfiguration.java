@@ -37,7 +37,17 @@ public class SecurityConfiguration {
                         .ignoringRequestMatchers("/logout")
                 )
                 .logout(l -> l
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/").permitAll()
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            // Log the successful logout information
+                            System.out.println("Successfully logged out");
+                            response.setStatus(200); // Ensure the response status is 200
+                            response.getWriter().write("Logout successful"); // Optional: Write success message
+                        })
                 )
 
                 .exceptionHandling(e -> e
@@ -53,17 +63,11 @@ public class SecurityConfiguration {
                             // Log the exception for debugging
                             System.err.println("Authentication failed: " + exception.getMessage());
 
-                            // Optionally log more details
-                            exception.printStackTrace();
-
                             // Respond with a failure message
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
                             response.setContentType("application/json");
                             response.getWriter().write("{\"error\": \"Authentication failed\", \"message\": \""
                                     + exception.getMessage() + "\"}");
-
-                            // If you want to redirect to a specific page (optional):
-                            // response.sendRedirect("http://localhost:4200/login-failure");
                         })
 
                 );
