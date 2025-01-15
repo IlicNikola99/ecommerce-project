@@ -43,7 +43,9 @@ public class Product extends AbstractAuditingEntity<UUID> {
     @Column(name = "nb_in_stock")
     private int nbInStock;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
+
     //private List<Picture> pictures;
 }
