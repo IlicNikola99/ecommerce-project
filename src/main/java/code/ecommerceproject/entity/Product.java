@@ -5,16 +5,18 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.UUID;
+
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "product")
 @Data
-public class Product extends AbstractAuditingEntity<Long> {
+public class Product extends AbstractAuditingEntity<UUID> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
+    private UUID id;
 
     @Column(name = "product_brand")
     private String productBrand;

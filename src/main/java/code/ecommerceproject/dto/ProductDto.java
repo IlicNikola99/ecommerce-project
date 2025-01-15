@@ -2,10 +2,12 @@ package code.ecommerceproject.dto;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class ProductDto {
 
-    private Long id;
+    private UUID id;
     private String productBrand;
     private String color;
     private String description;

@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
@@ -32,8 +34,8 @@ public class CategoryService {
 
 
     @Transactional
-    public Long delete(final Long categoryId) {
-        int nbOfRowsDeleted = categoryRepository.delete(categoryId);
+    public UUID delete(final UUID categoryId) {
+        int nbOfRowsDeleted = categoryRepository.deleteById(categoryId);
         if (nbOfRowsDeleted != 1) {
             throw new EntityNotFoundException(String.format("No category deleted with id %s", categoryId));
         }

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,19 +33,19 @@ public class ProductService {
     }
 
     @Transactional
-    public Long delete(final Long id) {
-        int nbOfRowsDeleted = productRepository.delete(id);
+    public UUID delete(final UUID id) {
+        int nbOfRowsDeleted = productRepository.deleteById(id);
         if (nbOfRowsDeleted != 1) {
             throw new EntityNotFoundException(String.format("No Product deleted with id %s", id));
         }
         return id;
     }
 
-    public Optional<Product> findById(final Long id) {
+    public Optional<Product> findById(final UUID id) {
         return productRepository.findById(id);
     }
 
-    public List<Product> findAllByIdIn(List<Long> ids) {
+    public List<Product> findAllByIdIn(List<UUID> ids) {
         return productRepository.findAllByIdIn(ids);
     }
 }
