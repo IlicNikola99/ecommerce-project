@@ -10,4 +10,8 @@ import java.util.Optional;
 public interface CategoryRepository extends PagingAndSortingRepository<Category, Long> {
 
     Optional<Category> findByName(String name);
+
+    Category save(Category category);
+
+    int delete(Long categoryId);
 }
