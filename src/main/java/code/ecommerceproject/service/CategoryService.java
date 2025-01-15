@@ -26,6 +26,11 @@ public class CategoryService {
         return categoryRepository.findAll(pageable);
     }
 
+    public Category findByName(final String name) {
+        return categoryRepository.findByName(name).orElseThrow();
+    }
+
+
     @Transactional
     public Long delete(final Long categoryId) {
         int nbOfRowsDeleted = categoryRepository.delete(categoryId);
