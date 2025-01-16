@@ -2,7 +2,6 @@ package code.ecommerceproject.service;
 
 import code.ecommerceproject.entity.Category;
 import code.ecommerceproject.repository.CategoryRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,11 +33,7 @@ public class CategoryService {
 
 
     @Transactional
-    public UUID delete(final UUID categoryId) {
-        int nbOfRowsDeleted = categoryRepository.deleteById(categoryId);
-        if (nbOfRowsDeleted != 1) {
-            throw new EntityNotFoundException(String.format("No category deleted with id %s", categoryId));
-        }
-        return categoryId;
+    public void delete(final UUID categoryId) {
+        categoryRepository.deleteById(categoryId);
     }
 }

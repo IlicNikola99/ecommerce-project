@@ -4,7 +4,6 @@ import code.ecommerceproject.dto.ProductDto;
 import code.ecommerceproject.entity.Product;
 import code.ecommerceproject.mapper.ProductMapper;
 import code.ecommerceproject.repository.ProductRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,12 +32,8 @@ public class ProductService {
     }
 
     @Transactional
-    public UUID delete(final UUID id) {
-        int nbOfRowsDeleted = productRepository.deleteById(id);
-        if (nbOfRowsDeleted != 1) {
-            throw new EntityNotFoundException(String.format("No Product deleted with id %s", id));
-        }
-        return id;
+    public void delete(final UUID id) {
+        productRepository.deleteById(id);
     }
 
     public Optional<Product> findById(final UUID id) {

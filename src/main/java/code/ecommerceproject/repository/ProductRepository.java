@@ -1,7 +1,7 @@
 package code.ecommerceproject.repository;
 
 import code.ecommerceproject.entity.Product;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,11 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ProductRepository extends PagingAndSortingRepository<Product, UUID> {
-
-    Product save(Product productToCreate);
-
-    int deleteById(UUID id);
+public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     Optional<Product> findById(UUID id);
 
