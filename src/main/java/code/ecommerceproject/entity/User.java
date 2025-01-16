@@ -34,4 +34,8 @@ public class User extends AbstractAuditingEntity<UUID> {
 
     @Column(name = "oauth_id")
     private Integer oauthId;
+
+    @Column(name = "role")
+    private String role;
+
 }

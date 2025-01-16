@@ -18,5 +18,6 @@ public class UserDto {
     private String username;
     private String profilePictureLink;
     private Integer oauthId;
+    private String role;
 
 }
