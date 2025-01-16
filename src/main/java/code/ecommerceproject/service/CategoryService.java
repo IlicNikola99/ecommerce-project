@@ -17,9 +17,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public Category save(final Category categoryDto) {
-        final Category category = new Category();
-        category.setName(categoryDto.getName());
+    public Category save(final Category category) {
         return categoryRepository.save(category);
     }
 
