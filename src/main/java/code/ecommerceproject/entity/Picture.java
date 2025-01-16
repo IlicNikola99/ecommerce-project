@@ -18,13 +18,13 @@ public class Picture extends AbstractAuditingEntity<UUID> {
     private UUID id;
 
     @Lob
-    @Column(name = "file", nullable = false)
+    @Column(name = "file")
     private byte[] file;
 
-    @Column(name = "file_content_type", nullable = false)
+    @Column(name = "file_content_type")
     private String mimeType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id")
     private Product product;
 }
