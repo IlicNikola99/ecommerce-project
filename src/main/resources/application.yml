@@ -50,3 +50,6 @@ application:
     exposed-headers: "*"
     allow-credentials: true
     max-age: 300
+
+jwt:
+  expiration-hours: 2

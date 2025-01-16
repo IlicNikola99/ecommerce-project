@@ -1,6 +1,7 @@
 package code.ecommerceproject.service;
 
 import code.ecommerceproject.dto.UserDto;
+import code.ecommerceproject.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -24,6 +26,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
     private final OAuth2AuthorizedClientService authorizedClientService;
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
 
     @Override
@@ -39,13 +42,20 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         final DefaultOAuth2User principal = (DefaultOAuth2User) oauthToken.getPrincipal();
         final UserDto userDto = userService.findUserByEmail(principal.getAttribute("email"));
 
-        final HttpSession session = request.getSession();
+        final Map<String, Object> claims = Map.of(
+                "role", userDto.getRole(),
+                "name", userDto.getEmail()
+        );
+        final String jwt = jwtUtil.generateToken(userDto.getEmail(), claims);
 
-        session.setAttribute("accessToken", accessToken);
+        HttpSession session = request.getSession();
+        session.setAttribute("jwt", jwt);
         session.setAttribute("user", userDto);
+        session.setAttribute("googleToken", accessToken);
+
 
         final String frontendRedirectUrl = "http://localhost:4200/login-success?token="
-                + accessToken + "&email=" + URLEncoder.encode(userDto.getEmail(), StandardCharsets.UTF_8); //TODO replace this hardcode
+                + URLEncoder.encode(jwt, StandardCharsets.UTF_8) + "&email=" + URLEncoder.encode(userDto.getEmail(), StandardCharsets.UTF_8); //TODO replace this hardcode
         response.sendRedirect(frontendRedirectUrl);
     }
 }
