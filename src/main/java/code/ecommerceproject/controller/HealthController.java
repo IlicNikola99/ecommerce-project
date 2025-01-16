@@ -10,7 +10,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 @RestController
-@RequestMapping("/health")
+@RequestMapping("public/health")
 public class HealthController {
 
     private final DataSource dataSource;
