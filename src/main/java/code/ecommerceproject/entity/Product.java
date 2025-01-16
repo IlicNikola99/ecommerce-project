@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
@@ -47,5 +49,6 @@ public class Product extends AbstractAuditingEntity<UUID> {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    //private List<Picture> pictures;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+    private Set<Picture> pictures = new HashSet<>();
 }

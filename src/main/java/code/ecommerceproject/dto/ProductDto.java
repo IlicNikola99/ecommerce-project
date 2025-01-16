@@ -2,6 +2,7 @@ package code.ecommerceproject.dto;
 
 import lombok.Data;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -17,4 +18,5 @@ public class ProductDto {
     private boolean featured;
     private int nbInStock;
     private CategoryDto category;
+    private List<PictureDto> pictures;
 }

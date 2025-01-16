@@ -1,8 +1,6 @@
 package code.ecommerceproject.service;
 
-import code.ecommerceproject.dto.ProductDto;
 import code.ecommerceproject.entity.Product;
-import code.ecommerceproject.mapper.ProductMapper;
 import code.ecommerceproject.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,10 +19,8 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public Product save(final ProductDto newProduct) {
-
-        final Product productEntity = ProductMapper.Instance.toEntity(newProduct);
-        return productRepository.save(productEntity);
+    public Product save(final Product newProduct) {
+        return productRepository.save(newProduct);
     }
 
     public Page<Product> findAll(final Pageable pageable) {
