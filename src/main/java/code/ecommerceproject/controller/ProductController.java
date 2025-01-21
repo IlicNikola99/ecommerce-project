@@ -56,12 +56,6 @@ public class ProductController {
         return ResponseEntity.ok(ProductMapper.Instance.toDto(savedProduct));
     }
 
-    @PostMapping(value = "/test")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<String> save1() throws JsonProcessingException {
-
-        return ResponseEntity.ok("WORKSSS");
-    }
 
     private Function<MultipartFile, PictureDto> mapMultipartFileToPicture() {
         return multipartFile -> {
