@@ -89,7 +89,7 @@ public class ProductController {
         final Page<Product> products = productService.findAll(pageable);
 
         final Page<ProductDto> restProducts = new PageImpl<>(
-                products.getContent().stream().map(ProductMapper.Instance::toDto).collect(Collectors.toList()),
+                products.getContent().parallelStream().map(ProductMapper.Instance::toDto).collect(Collectors.toList()),
                 pageable,
                 products.getTotalElements()
         );
