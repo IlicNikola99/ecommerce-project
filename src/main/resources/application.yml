@@ -17,6 +17,12 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     username: nikola
     password: nikola
+    hikari:
+      minimumIdle: 2
+      maximumPoolSize: 10
+      idleTimeout: 120000
+      connectionTimeout: 300000
+      leakDetectionThreshold: 300000
   security:
     oauth2:
       client:
