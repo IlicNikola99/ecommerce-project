@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 
@@ -16,11 +17,14 @@ import java.util.Map;
 public class JwtUtil {
 
     private final JwtConfig jwtConfig;
-    private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final SecretKey key;
 
     @Autowired
     public JwtUtil(JwtConfig jwtConfig) {
         this.jwtConfig = jwtConfig;
+        String secretKeyString = jwtConfig.getSecretKey();
+        byte[] decodedKey = Base64.getDecoder().decode(secretKeyString);
+        this.key = Keys.hmacShaKeyFor(decodedKey);
     }
 
     public String generateToken(String subject, Map<String, Object> claims) {
