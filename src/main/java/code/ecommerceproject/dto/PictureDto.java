@@ -9,7 +9,6 @@ import java.util.UUID;
 public class PictureDto {
 
     private UUID id;
-    private byte[] file;
-    private String mimeType;
+    private String url;
     private Product product;
 }

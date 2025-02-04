@@ -17,12 +17,8 @@ public class Picture extends AbstractAuditingEntity<UUID> {
     @Column(name = "id")
     private UUID id;
 
-    @Lob
-    @Column(name = "file")
-    private byte[] file;
-
-    @Column(name = "file_content_type")
-    private String mimeType;
+    @Column(name = "picture_url")
+    private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
