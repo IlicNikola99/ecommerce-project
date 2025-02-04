@@ -19,7 +19,7 @@ spring:
     password: nikola
     hikari:
       minimumIdle: 2
-      maximumPoolSize: 10
+      maximumPoolSize: 100
       idleTimeout: 120000
       connectionTimeout: 300000
       leakDetectionThreshold: 300000
