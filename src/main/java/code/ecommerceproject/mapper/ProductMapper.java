@@ -17,6 +17,7 @@ public interface ProductMapper {
     Product toEntity(ProductDto productDto);
 
     @Mapping(target = "category", source = "category", qualifiedByName = "mapCategoryToDto")
+    @Mapping(target = "pictures", ignore = true)
     ProductDto toDto(Product product);
 
     @Named("mapCategoryToDto")
