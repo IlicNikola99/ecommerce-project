@@ -39,4 +39,8 @@ public class ProductService {
     public List<Product> findAllByIdIn(List<UUID> ids) {
         return productRepository.findAllByIdIn(ids);
     }
+
+    public Page<Product> findAllFeatured(Pageable pageable) {
+        return productRepository.findAllFeatured(pageable);
+    }
 }

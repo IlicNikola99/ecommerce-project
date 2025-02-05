@@ -67,4 +67,16 @@ public class ProductController {
         );
         return ResponseEntity.ok(restProducts);
     }
+
+    @GetMapping("/featured")
+    public ResponseEntity<Page<ProductDto>> getAllFeatured(final Pageable pageable) {
+        final Page<Product> products = productService.findAllFeatured(pageable);
+
+        final Page<ProductDto> restProducts = new PageImpl<>(
+                products.getContent().parallelStream().map(ProductMapper.Instance::toDto).collect(Collectors.toList()),
+                pageable,
+                products.getTotalElements()
+        );
+        return ResponseEntity.ok(restProducts);
+    }
 }
