@@ -1,6 +1,6 @@
 package code.ecommerceproject.dto;
 
-import code.ecommerceproject.entity.Product;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.UUID;
@@ -10,5 +10,6 @@ public class PictureDto {
 
     private UUID id;
     private String url;
-    private Product product;
+    @JsonIgnore
+    private ProductDto product;
 }
