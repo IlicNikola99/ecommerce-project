@@ -1,6 +1,7 @@
 package code.ecommerceproject.entity;
 
 import code.ecommerceproject.enums.ProductSize;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "pictures")
 @Entity
 @Table(name = "product")
 @Data
@@ -49,6 +50,7 @@ public class Product extends AbstractAuditingEntity<UUID> {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private Set<Picture> pictures = new HashSet<>();
 }

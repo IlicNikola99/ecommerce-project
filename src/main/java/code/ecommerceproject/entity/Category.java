@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Set;
 import java.util.UUID;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "products")
 @Entity
 @Table(name = "category")
 @Data
