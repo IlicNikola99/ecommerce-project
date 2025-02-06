@@ -36,6 +36,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/public/**").permitAll() // Permit access to public paths
                         .requestMatchers("/api/product/featured").permitAll()
+                        .requestMatchers("/api/product/related").permitAll()
+                        .requestMatchers("/api/product/{id}").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

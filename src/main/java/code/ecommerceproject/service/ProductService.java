@@ -36,11 +36,15 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
-    public List<Product> findAllByIdIn(List<UUID> ids) {
+    public List<Product> findAllByIdIn(final List<UUID> ids) {
         return productRepository.findAllByIdIn(ids);
     }
 
-    public Page<Product> findAllFeatured(Pageable pageable) {
+    public Page<Product> findAllFeatured(final Pageable pageable) {
         return productRepository.findAllFeatured(pageable);
+    }
+
+    public Page<Product> findRelatedInCategory(final UUID categoryId, final UUID productId, final Pageable pageable) {
+        return productRepository.findRelatedInCategory(categoryId, productId, pageable);
     }
 }

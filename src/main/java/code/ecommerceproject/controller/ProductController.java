@@ -35,12 +35,11 @@ public class ProductController {
 
         final Product productEntity = ProductMapper.Instance.toEntity(productDto);
         productEntity.getPictures().forEach(pictureEntity -> {
-            pictureEntity.setProduct(productEntity);//TODO move this to mapper
+            pictureEntity.setProduct(productEntity);// TODO move this to mapper
         });
         final Product savedProduct = productService.save(productEntity);
         return ResponseEntity.ok(ProductMapper.Instance.toDto(savedProduct));
     }
-
 
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
@@ -61,10 +60,9 @@ public class ProductController {
         final Page<Product> products = productService.findAll(pageable);
 
         final Page<ProductDto> restProducts = new PageImpl<>(
-                products.getContent().parallelStream().map(ProductMapper.Instance::toDto).collect(Collectors.toList()),
+                products.getContent().stream().map(ProductMapper.Instance::toDto).collect(Collectors.toList()),
                 pageable,
-                products.getTotalElements()
-        );
+                products.getTotalElements());
         return ResponseEntity.ok(restProducts);
     }
 
@@ -73,10 +71,32 @@ public class ProductController {
         final Page<Product> products = productService.findAllFeatured(pageable);
 
         final Page<ProductDto> restProducts = new PageImpl<>(
-                products.getContent().parallelStream().map(ProductMapper.Instance::toDto).collect(Collectors.toList()),
+                products.getContent().stream().map(ProductMapper.Instance::toDto).collect(Collectors.toList()),
                 pageable,
-                products.getTotalElements()
-        );
+                products.getTotalElements());
         return ResponseEntity.ok(restProducts);
+    }
+
+    @GetMapping("/related")
+    public ResponseEntity<Page<ProductDto>> getRelatedProducts(
+            final @RequestParam("categoryId") UUID categoryId,
+            final @RequestParam("productId") UUID productId,
+            final Pageable pageable) {
+        final Page<Product> products = productService.findRelatedInCategory(categoryId, productId, pageable);
+
+        final Page<ProductDto> restProducts = new PageImpl<>(
+                products.getContent().stream().map(ProductMapper.Instance::toDto).collect(Collectors.toList()),
+                pageable,
+                products.getTotalElements());
+        return ResponseEntity.ok(restProducts);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDto> getProductById(
+            final @PathVariable("id") UUID id) {
+        final Product product = productService.findById(id).orElseThrow();
+
+        final ProductDto restProduct = ProductMapper.Instance.toDto(product);
+        return ResponseEntity.ok(restProduct);
     }
 }
