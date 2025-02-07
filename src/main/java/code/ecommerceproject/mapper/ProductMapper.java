@@ -11,6 +11,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,6 +38,7 @@ public interface ProductMapper {
     @Named("mapPicturesToDto")
     default List<PictureDto> mapPicturesToDto(Set<Picture> pictures) {
         return pictures.stream()
+                .sorted(Comparator.comparing(Picture::getCreatedDate))
                 .map(picture -> {
                     PictureDto pictureDto = new PictureDto();
                     pictureDto.setId(picture.getId());
