@@ -47,7 +47,7 @@ public class CategoryController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/findAll")
     public ResponseEntity<Page<CategoryDto>> findAll(final Pageable pageable) {
         final Page<Category> categories = categoryService.findAll(pageable);
         final PageImpl<CategoryDto> restCategories = new PageImpl<>(
