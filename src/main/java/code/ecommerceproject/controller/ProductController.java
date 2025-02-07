@@ -79,10 +79,9 @@ public class ProductController {
 
     @GetMapping("/related")
     public ResponseEntity<Page<ProductDto>> getRelatedProducts(
-            final @RequestParam("categoryId") UUID categoryId,
             final @RequestParam("productId") UUID productId,
             final Pageable pageable) {
-        final Page<Product> products = productService.findRelatedInCategory(categoryId, productId, pageable);
+        final Page<Product> products = productService.findRelatedProducts(productId, pageable);
 
         final Page<ProductDto> restProducts = new PageImpl<>(
                 products.getContent().stream().map(ProductMapper.Instance::toDto).collect(Collectors.toList()),

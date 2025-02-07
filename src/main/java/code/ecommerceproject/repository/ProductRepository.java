@@ -22,7 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Query("SELECT p FROM Product p WHERE p.featured = true")
     Page<Product> findAllFeatured(Pageable pageable);
 
-    @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId AND p.id != :productId")
-    Page<Product> findRelatedInCategory(@Param("categoryId") UUID categoryId, @Param("productId") UUID excludedProductId, Pageable pageable);
+    @Query("SELECT p FROM Product p WHERE p.id != :productId AND p.category.id = :categoryId")
+    Page<Product> findRelatedProducts(@Param("productId") UUID productId, @Param("categoryId") UUID categoryId, Pageable pageable);
 
 }

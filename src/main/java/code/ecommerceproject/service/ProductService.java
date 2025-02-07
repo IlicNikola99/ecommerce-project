@@ -44,7 +44,8 @@ public class ProductService {
         return productRepository.findAllFeatured(pageable);
     }
 
-    public Page<Product> findRelatedInCategory(final UUID categoryId, final UUID productId, final Pageable pageable) {
-        return productRepository.findRelatedInCategory(categoryId, productId, pageable);
+    public Page<Product> findRelatedProducts(final UUID productId, final Pageable pageable) {
+        final Product product = productRepository.findById(productId).orElseThrow();
+        return productRepository.findRelatedProducts(productId, product.getCategory().getId(), pageable);
     }
 }
