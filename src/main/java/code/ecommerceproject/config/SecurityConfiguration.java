@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/product/{id}").permitAll()
                         .requestMatchers("/api/product/search").permitAll()
                         .requestMatchers("/api/category/findAll").permitAll()
+                        .requestMatchers("/api/orders/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
