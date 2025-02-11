@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.UUID;
 
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "picture")
 @Data
+@ToString
 public class Picture extends AbstractAuditingEntity<UUID> {
 
     @Id
@@ -23,6 +25,7 @@ public class Picture extends AbstractAuditingEntity<UUID> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
+    @ToString.Exclude
     @JsonBackReference
     private Product product;
 }

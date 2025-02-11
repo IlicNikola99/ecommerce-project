@@ -3,6 +3,7 @@ package code.ecommerceproject.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Set;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "category")
 @Data
+@ToString
 public class Category extends AbstractAuditingEntity<UUID> {
 
     @Id
@@ -21,6 +23,7 @@ public class Category extends AbstractAuditingEntity<UUID> {
     @Column(name = "name")
     private String name;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "category")
     private Set<Product> products;
 }
