@@ -1,6 +1,5 @@
 package code.ecommerceproject.entity;
 
-import code.ecommerceproject.enums.ProductSize;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -37,8 +36,7 @@ public class Product extends AbstractAuditingEntity<UUID> {
     private double price;
 
     @Column(name = "size")
-    @Enumerated(EnumType.STRING)
-    private ProductSize size;
+    private Double size;
 
     @Column(name = "featured")
     private boolean featured;

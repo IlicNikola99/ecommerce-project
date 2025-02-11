@@ -2,7 +2,6 @@ package code.ecommerceproject.controller;
 
 import code.ecommerceproject.dto.ProductDto;
 import code.ecommerceproject.entity.Product;
-import code.ecommerceproject.enums.ProductSize;
 import code.ecommerceproject.mapper.ProductMapper;
 import code.ecommerceproject.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -89,7 +88,7 @@ public class ProductController {
     @GetMapping("/search")
     public ResponseEntity<Page<ProductDto>> getProductsByCategoryAndSizes(
             final @RequestParam(value = "categoryId", required = false) UUID categoryId,
-            final @RequestParam(value = "sizes", required = false) List<ProductSize> sizes,
+            final @RequestParam(value = "productSizes", required = false) List<Double> sizes,
             final Pageable pageable) {
         final Page<Product> products = productService.findByCategoryAndSizes(categoryId, sizes, pageable);
         return ResponseEntity.ok(convertToDtoPage(products, pageable));

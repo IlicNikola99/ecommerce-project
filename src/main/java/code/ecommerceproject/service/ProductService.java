@@ -1,7 +1,6 @@
 package code.ecommerceproject.service;
 
 import code.ecommerceproject.entity.Product;
-import code.ecommerceproject.enums.ProductSize;
 import code.ecommerceproject.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -50,7 +49,7 @@ public class ProductService {
         return productRepository.findRelatedProducts(productId, product.getCategory().getId(), pageable);
     }
 
-    public Page<Product> findByCategoryAndSizes(final UUID categoryId, final List<ProductSize> sizes, final Pageable pageable) {
+    public Page<Product> findByCategoryAndSizes(final UUID categoryId, final List<Double> sizes, final Pageable pageable) {
         return productRepository.findByCategoryAndSizes(categoryId, sizes, pageable);
     }
 }

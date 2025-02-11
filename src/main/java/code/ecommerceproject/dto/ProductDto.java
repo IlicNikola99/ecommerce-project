@@ -14,7 +14,7 @@ public class ProductDto {
     private String description;
     private String name;
     private double price;
-    private String size;
+    private Double size;
     private boolean featured;
     private int nbInStock;
     private CategoryDto category;

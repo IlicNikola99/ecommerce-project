@@ -1,7 +1,6 @@
 package code.ecommerceproject.repository;
 
 import code.ecommerceproject.entity.Product;
-import code.ecommerceproject.enums.ProductSize;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,6 +28,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Query("SELECT p FROM Product p WHERE " +
             "(:sizes IS NULL OR p.size IN :sizes) " +
             "AND (:categoryId IS NULL OR p.category.id = :categoryId)")
-    Page<Product> findByCategoryAndSizes(@Param("categoryId") UUID categoryId, @Param("sizes") List<ProductSize> sizes, Pageable pageable);
+    Page<Product> findByCategoryAndSizes(@Param("categoryId") UUID categoryId, @Param("sizes") List<Double> sizes, Pageable pageable);
 
 }
