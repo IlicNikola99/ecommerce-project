@@ -62,7 +62,7 @@ public class OrderService {
                     dto.setName(product.getName());
                     dto.setPrice(product.getPrice());
                     dto.setBrand(product.getProductBrand());
-                    dto.setPictureUrl(product.getPictures().isEmpty() ? null : product.getPictures().stream().findFirst().get().getUrl());
+                    dto.setPictureUrl(product.getPictures().isEmpty() ? null : product.getPictures().stream().reduce((first, second) -> second).get().getUrl());
                     dto.setQuantity(productCount.get(product.getId()).intValue());
                     dto.setProductId(product.getId());
                     return dto;
