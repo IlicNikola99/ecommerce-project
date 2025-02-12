@@ -1,8 +1,7 @@
 package code.ecommerceproject.service;
 
-import code.ecommerceproject.dto.CartItemsDto;
+import code.ecommerceproject.dto.CartProductDto;
 import code.ecommerceproject.dto.CartRequestDto;
-import code.ecommerceproject.dto.CartResponseDto;
 import code.ecommerceproject.entity.Order;
 import code.ecommerceproject.entity.Product;
 import code.ecommerceproject.repository.OrderRepository;
@@ -40,30 +39,30 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<CartResponseDto> getCartDetails(final CartRequestDto cartRequestDto) {
+    public List<CartProductDto> getCartDetails(final CartRequestDto cartRequestDto) {
 
-        final List<UUID> productIds = cartRequestDto.getCartItems().stream()
-                .map(CartItemsDto::getProductId)
+        final List<UUID> productIds = cartRequestDto
+                .getProductQuantity()
+                .keySet()
+                .stream()
                 .toList();
 
         final List<Product> products = productService.findAllByIdIn(productIds);
 
-        return mapToCartResponse(products);
+        return mapToCartResponse(products, cartRequestDto.getProductQuantity());
 
     }
 
-    private List<CartResponseDto> mapToCartResponse(final List<Product> products) {
-        final Map<UUID, Long> productCount = products.stream()
-                .collect(Collectors.groupingBy(Product::getId, Collectors.counting()));
+    private List<CartProductDto> mapToCartResponse(final List<Product> products, final Map<UUID, Integer> productQuantity) {
 
         return products.stream()
                 .map(product -> {
-                    CartResponseDto dto = new CartResponseDto();
+                    CartProductDto dto = new CartProductDto();
                     dto.setName(product.getName());
                     dto.setPrice(product.getPrice());
                     dto.setBrand(product.getProductBrand());
                     dto.setPictureUrl(product.getPictures().isEmpty() ? null : product.getPictures().stream().reduce((first, second) -> second).get().getUrl());
-                    dto.setQuantity(productCount.get(product.getId()).intValue());
+                    dto.setQuantity(productQuantity.get(product.getId()));
                     dto.setProductId(product.getId());
                     return dto;
                 })

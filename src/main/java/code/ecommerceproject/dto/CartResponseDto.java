@@ -1,15 +1,14 @@
 package code.ecommerceproject.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.UUID;
+import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CartResponseDto {
-    private String name;
-    private Double price;
-    private String brand;
-    private String pictureUrl;
-    private int quantity;
-    private UUID productId;
-} 
+    private List<CartProductDto> products;
+}
