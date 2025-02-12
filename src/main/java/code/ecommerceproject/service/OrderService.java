@@ -105,4 +105,13 @@ public class OrderService {
                 .distinct()
                 .collect(Collectors.toList());
     }
-} 
+
+    @Transactional
+    public void updateOrder(final String stripeSessionId) {
+
+        final Order order = orderRepository.findByStripeSessionId(stripeSessionId);
+        order.setStatus(OrderStatus.PAID);
+
+        productService.updateQuantity(order.getOrderedProducts());
+    }
+}

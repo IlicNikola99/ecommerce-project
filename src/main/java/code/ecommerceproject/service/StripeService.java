@@ -25,8 +25,6 @@ public class StripeService {
     @Value("${stripe.client-base-url}")
     private String clientBaseUrl;
 
-    private final ProductService productService;
-
     @PostConstruct
     public void setApiKey() {
         Stripe.apiKey = apiKey;
@@ -56,7 +54,7 @@ public class StripeService {
                     .build();
 
             final SessionCreateParams.LineItem lineItem = SessionCreateParams.LineItem.builder()
-                    .setQuantity(product.getQuantity())
+                    .setQuantity(Long.valueOf(product.getQuantity()))
                     .setPriceData(linePriceData)
                     .build();
 

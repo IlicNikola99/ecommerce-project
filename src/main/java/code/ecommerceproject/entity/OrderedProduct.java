@@ -30,7 +30,7 @@ public class OrderedProduct {
     private Double price;
 
     @Column(name = "quantity", nullable = false)
-    private long quantity;
+    private int quantity;
 
     @Column(name = "product_name", nullable = false)
     private String productName;

@@ -19,7 +19,7 @@ public class SecurityConfiguration {
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
 
     public SecurityConfiguration(CustomOAuth2UserService customOAuth2UserService, CustomOAuth2SuccessHandler customOAuth2SuccessHandler, JwtAuthenticationFilter jwtAuthenticationFilter) {
@@ -41,6 +41,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/product/search").permitAll()
                         .requestMatchers("/api/category/findAll").permitAll()
                         .requestMatchers("/api/orders/get-cart-details").permitAll()
+                        .requestMatchers("/api/orders/webhook").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
