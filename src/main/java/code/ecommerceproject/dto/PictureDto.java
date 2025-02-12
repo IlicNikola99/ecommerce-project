@@ -10,6 +10,7 @@ public class PictureDto {
 
     private UUID id;
     private String url;
+    private Boolean featured;
     @JsonIgnore
     private ProductDto product;
 }

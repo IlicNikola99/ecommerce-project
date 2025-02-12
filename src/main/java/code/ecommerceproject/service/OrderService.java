@@ -3,6 +3,7 @@ package code.ecommerceproject.service;
 import code.ecommerceproject.dto.CartProductDto;
 import code.ecommerceproject.dto.CartRequestDto;
 import code.ecommerceproject.entity.Order;
+import code.ecommerceproject.entity.Picture;
 import code.ecommerceproject.entity.Product;
 import code.ecommerceproject.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +62,13 @@ public class OrderService {
                     dto.setName(product.getName());
                     dto.setPrice(product.getPrice());
                     dto.setBrand(product.getProductBrand());
-                    dto.setPictureUrl(product.getPictures().isEmpty() ? null : product.getPictures().stream().reduce((first, second) -> second).get().getUrl());
+                    dto.setPictureUrl(
+                            product.getPictures().stream()
+                                    .filter(Picture::getFeatured)  // filter to find the featured picture
+                                    .findFirst()  // get the first match (there should be only one featured picture)
+                                    .map(Picture::getUrl)
+                                    .orElse(null)
+                    );
                     dto.setQuantity(productQuantity.get(product.getId()));
                     dto.setProductId(product.getId());
                     return dto;

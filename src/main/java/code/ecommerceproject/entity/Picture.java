@@ -23,6 +23,9 @@ public class Picture extends AbstractAuditingEntity<UUID> {
     @Column(name = "picture_url")
     private String url;
 
+    @Column(name = "featured")
+    private Boolean featured = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     @ToString.Exclude

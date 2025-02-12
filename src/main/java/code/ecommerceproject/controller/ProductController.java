@@ -38,6 +38,9 @@ public class ProductController {
         productEntity.getPictures().forEach(pictureEntity -> {
             pictureEntity.setProduct(productEntity);// TODO move this to mapper
         });
+        productEntity.getPictures().stream()
+                .findFirst()
+                .ifPresent(picture -> picture.setFeatured(true));
         final Product savedProduct = productService.save(productEntity);
         return ResponseEntity.ok(ProductMapper.Instance.toDto(savedProduct));
     }
