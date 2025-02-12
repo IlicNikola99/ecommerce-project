@@ -1,6 +1,7 @@
 package code.ecommerceproject.service;
 
 import code.ecommerceproject.dto.UserDto;
+import code.ecommerceproject.mapper.UserMapper;
 import code.ecommerceproject.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,7 +41,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
         final String accessToken = client.getAccessToken().getTokenValue();
         final DefaultOAuth2User principal = (DefaultOAuth2User) oauthToken.getPrincipal();
-        final UserDto userDto = userService.findUserByEmail(principal.getAttribute("email"));
+        final UserDto userDto = UserMapper.Instance.toDto(userService.findUserByEmail(principal.getAttribute("email")));
 
         final Map<String, Object> claims = Map.of(
                 "role", userDto.getRole(),
@@ -54,7 +55,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         session.setAttribute("googleToken", accessToken);
 
 
-        final String frontendRedirectUrl = "http://localhost:4200/login-success?token="
+        final String frontendRedirectUrl = "http://localhost:4200/login-success?token=" //TODO move this hardcode
                 + URLEncoder.encode(jwt, StandardCharsets.UTF_8) + "&email=" + URLEncoder.encode(userDto.getEmail(), StandardCharsets.UTF_8); //TODO replace this hardcode
         response.sendRedirect(frontendRedirectUrl);
     }

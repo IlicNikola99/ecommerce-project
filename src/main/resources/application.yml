@@ -60,3 +60,8 @@ application:
 jwt:
   expiration-hours: 2
   secret-key: c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2
+
+stripe:
+  publishable-key: pk_test_51QrivNEKvRiokhn6dBrrAAHcYRcaTNZq5rGuBKaicK111tVNoucFlPylvGMId7khJwQofc3g8ZK2Crn9GMXepzho00s91WXbN2
+  secret-key: sk_test_51QrivNEKvRiokhn64pfrvUTsvfdsjJTYwgMTs4peeBqV24WcHWMBc6FTugWMYA9kXM4AUaKQlJRLW63p873ElVSx00eWRK8Ztm
+  client-base-url: http://localhost:4200

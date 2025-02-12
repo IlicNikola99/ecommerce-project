@@ -43,6 +43,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         userRepository.findByEmail(userInfo.getEmail()).orElseGet(() -> {
             final User newUser = UserMapper.Instance.toEntity(userInfo);
+            newUser.setRole("ROLE_USER");
             return userRepository.save(newUser);
         });
     }
@@ -52,6 +53,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         userRepository.findByOauthId(userInfo.getOauthId()).orElseGet(() -> {
             final User newUser = UserMapper.Instance.toEntity(userInfo);
+            newUser.setRole("ROLE_USER");
             return userRepository.save(newUser);
         });
     }

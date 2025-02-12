@@ -4,15 +4,17 @@ import code.ecommerceproject.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "orderedProducts")
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @Data
+@ToString
 public class Order extends AbstractAuditingEntity<UUID> {
 
     @Id
@@ -27,7 +29,8 @@ public class Order extends AbstractAuditingEntity<UUID> {
     @Column(name = "stripe_session_id", nullable = false)
     private String stripeSessionId;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderedProduct> orderedProducts = new HashSet<>();
 
     @ManyToOne

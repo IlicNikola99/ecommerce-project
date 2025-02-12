@@ -1,6 +1,7 @@
 package code.ecommerceproject.controller;
 
 import code.ecommerceproject.dto.UserDto;
+import code.ecommerceproject.mapper.UserMapper;
 import code.ecommerceproject.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,6 @@ public class UserController {
 
     @GetMapping("/{email}")
     public UserDto getUserByEmail(final @PathVariable String email) {
-        return userService.findUserByEmail(email);
+        return UserMapper.Instance.toDto(userService.findUserByEmail(email));
     }
 }
