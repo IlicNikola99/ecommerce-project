@@ -97,6 +97,16 @@ public class ProductController {
         return ResponseEntity.ok(convertToDtoPage(products, pageable));
     }
 
+    @PostMapping("/update-quantity")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<ProductDto> updateProductQuantity(
+            @RequestParam("productId") UUID productId,
+            @RequestParam("amount") Integer amount) {
+        final Product product = productService.updateProductQuantity(productId, amount);
+        final ProductDto restProduct = ProductMapper.Instance.toDto(product);
+        return ResponseEntity.ok(restProduct);
+    }
+
     private Page<ProductDto> convertToDtoPage(final Page<Product> products, final Pageable pageable) {
         return new PageImpl<>(
                 products.getContent().stream().map(ProductMapper.Instance::toDto).collect(Collectors.toList()),

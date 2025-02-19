@@ -65,4 +65,14 @@ public class ProductService {
                     });
         }
     }
+
+    @Transactional
+    public Product updateProductQuantity(final UUID productId, final int amount) {
+        return productRepository.findById(productId)
+                .map(product -> {
+                    product.setNbInStock(amount);
+                    return productRepository.save(product);
+                })
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+    }
 }
