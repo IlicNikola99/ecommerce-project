@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderedProduct {
+public class OrderedProduct extends AbstractAuditingEntity<UUID> {
 
     @Id
     @Column(name = "product_id", nullable = false)
@@ -34,4 +35,21 @@ public class OrderedProduct {
 
     @Column(name = "product_name", nullable = false)
     private String productName;
+
+    @Override
+    public UUID getId() {
+        return productId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderedProduct that = (OrderedProduct) o;
+        return Objects.equals(productId, that.productId) && Objects.equals(order.getId(), that.order.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productId, order);
+    }
 }
