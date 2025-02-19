@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.util.UUID;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "user")
 @Entity
 @Table(name="address")
 @Getter
@@ -32,4 +32,8 @@ public class Address extends AbstractAuditingEntity<UUID> {
 
     @Column(name="zip_code")
     private String zipCode;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }
