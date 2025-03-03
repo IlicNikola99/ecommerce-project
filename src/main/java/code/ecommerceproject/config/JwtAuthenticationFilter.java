@@ -1,6 +1,7 @@
 package code.ecommerceproject.config;
 
 import code.ecommerceproject.util.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,19 +31,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             final String token = authorizationHeader.substring(7);
-            final String email = jwtUtil.extractEmail(token);
-            final List<String> roles = Collections.singletonList(jwtUtil.extractRoles(token));
+            try {
+                final String email = jwtUtil.extractEmail(token);
+                final List<String> roles = Collections.singletonList(jwtUtil.extractRoles(token));
 
-            final List<SimpleGrantedAuthority> authorities = roles.stream()
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
 
-            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                final UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(email, null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                final List<SimpleGrantedAuthority> authorities = roles.stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+
+                if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    final UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(email, null, authorities);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+
+                filterChain.doFilter(request, response);
+            } catch (ExpiredJwtException e) {
+                logger.warn("JWT token is expired", e);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setHeader("Expired-Jwt", "true");
             }
         }
-        filterChain.doFilter(request, response);
     }
 }
