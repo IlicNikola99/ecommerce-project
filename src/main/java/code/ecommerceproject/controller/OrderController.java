@@ -1,11 +1,9 @@
 package code.ecommerceproject.controller;
 
-import code.ecommerceproject.dto.CartProductDto;
-import code.ecommerceproject.dto.CartRequestDto;
-import code.ecommerceproject.dto.CartResponseDto;
-import code.ecommerceproject.dto.StripeSessionIdDto;
+import code.ecommerceproject.dto.*;
 import code.ecommerceproject.entity.Order;
 import code.ecommerceproject.entity.User;
+import code.ecommerceproject.mapper.OrderMapper;
 import code.ecommerceproject.service.AddressService;
 import code.ecommerceproject.service.OrderService;
 import code.ecommerceproject.service.UserService;
@@ -52,6 +50,15 @@ public class OrderController {
         final User loggedInUser = userService.findUserByEmail(userEmail);
         final Order createdOrder = orderService.createOrder(cartRequestDto, loggedInUser);
         return ResponseEntity.ok(new StripeSessionIdDto(createdOrder.getStripeSessionId()));
+
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/all-orders")
+    public ResponseEntity<List<OrderDto>> getAllOrders() {
+
+        final List<Order> orderEntities = orderService.getAllOrders();
+        return ResponseEntity.ok(OrderMapper.Instance.toDtoList(orderEntities));
 
     }
 
