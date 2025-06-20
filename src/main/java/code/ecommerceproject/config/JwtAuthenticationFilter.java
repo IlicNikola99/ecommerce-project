@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -24,6 +25,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
+    private static final List<String> EXCLUDED_PATHS = List.of(
+            "/api/product/related",
+            "/api/product/featured",
+            "/api/product/search",
+            "/api/product/*", // for /api/product/{id}
+            "/api/category/findAll",
+            "/api/orders/get-cart-details",
+            "/api/orders/webhook",
+            "/public/"
+    );
+
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return EXCLUDED_PATHS.stream().anyMatch(p -> pathMatcher.match(p, path));
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -52,6 +71,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setHeader("Expired-Jwt", "true");
             }
+        } else {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }
 }
