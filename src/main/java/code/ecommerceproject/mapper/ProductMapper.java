@@ -38,11 +38,16 @@ public interface ProductMapper {
     @Named("mapPicturesToDto")
     default List<PictureDto> mapPicturesToDto(Set<Picture> pictures) {
         return pictures.stream()
-                .sorted(Comparator.comparing(Picture::getCreatedDate))
+                .sorted(
+                        Comparator
+                                .comparing((Picture p) -> Boolean.TRUE.equals(p.getFeatured()) ? 0 : 1)
+                                .thenComparing(Picture::getCreatedDate)
+                )
                 .map(picture -> {
                     PictureDto pictureDto = new PictureDto();
                     pictureDto.setId(picture.getId());
                     pictureDto.setUrl(picture.getUrl());
+                    pictureDto.setFeatured(picture.getFeatured());
                     return pictureDto;
                 })
                 .collect(Collectors.toList());
