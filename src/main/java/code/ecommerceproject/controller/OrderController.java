@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -65,24 +67,26 @@ public class OrderController {
 
     @GetMapping("/{userId}")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") 
-    public ResponseEntity<List<OrderDto>> getOrdersByUserId(@PathVariable UUID userId,
+    public ResponseEntity<Page<OrderDto>> getOrdersByUserId(@PathVariable UUID userId, Pageable pageable,
                                                            org.springframework.security.core.Authentication authentication) {
         if (!userService.checkUser(userId, authentication)) {
             return ResponseEntity.status(403).build();
         }
     
-        final List<Order> orders = orderService.getOrdersByUserId(userId);
-        return ResponseEntity.ok(OrderMapper.Instance.toDtoList(orders));
-    }
+        final Page<Order> page = orderService.getOrdersByUserId(userId, pageable);  
+        final Page<OrderDto> mapped = page.map(OrderMapper.Instance::toDto);
+        return ResponseEntity.ok(mapped);
+    }  
 
     @GetMapping("/authenticated")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") 
-    public ResponseEntity<List<OrderDto>> getOrdersByAuthenticatedUser(org.springframework.security.core.Authentication authentication) {
+    public ResponseEntity<Page<OrderDto>> getOrdersByAuthenticatedUser(org.springframework.security.core.Authentication authentication, Pageable pageable) {
         final String email = (String) authentication.getPrincipal();
         final User loggedInUser = userService.findUserByEmail(email);
-    
-        final List<Order> orders = orderService.getOrdersByUserId(loggedInUser.getId());
-        return ResponseEntity.ok(OrderMapper.Instance.toDtoList(orders));
+
+        final Page<Order> page = orderService.getOrdersByUserId(loggedInUser.getId(), pageable);
+        final Page<OrderDto> mapped = page.map(OrderMapper.Instance::toDto);
+        return ResponseEntity.ok(mapped);
     }
 
     @PostMapping("/webhook")

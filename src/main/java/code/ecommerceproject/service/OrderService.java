@@ -6,6 +6,8 @@ import code.ecommerceproject.entity.*;
 import code.ecommerceproject.enums.OrderStatus;
 import code.ecommerceproject.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -115,7 +117,7 @@ public class OrderService {
         productService.updateQuantity(order.getOrderedProducts());
     }
 
-    public List<Order> getOrdersByUserId(final UUID userId) {
-        return orderRepository.findByUserId(userId);
+    public Page<Order> getOrdersByUserId(final UUID userId, final Pageable pageable) {
+        return orderRepository.findByUserId(userId, pageable);
     }
 }
