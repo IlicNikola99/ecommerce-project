@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -60,6 +61,28 @@ public class OrderController {
         final List<Order> orderEntities = orderService.getAllOrders();
         return ResponseEntity.ok(OrderMapper.Instance.toDtoList(orderEntities));
 
+    }
+
+    @GetMapping("/{userId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") 
+    public ResponseEntity<List<OrderDto>> getOrdersByUserId(@PathVariable UUID userId,
+                                                           org.springframework.security.core.Authentication authentication) {
+        if (!userService.checkUser(userId, authentication)) {
+            return ResponseEntity.status(403).build();
+        }
+    
+        final List<Order> orders = orderService.getOrdersByUserId(userId);
+        return ResponseEntity.ok(OrderMapper.Instance.toDtoList(orders));
+    }
+
+    @GetMapping("/authenticated")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") 
+    public ResponseEntity<List<OrderDto>> getOrdersByAuthenticatedUser(org.springframework.security.core.Authentication authentication) {
+        final String email = (String) authentication.getPrincipal();
+        final User loggedInUser = userService.findUserByEmail(email);
+    
+        final List<Order> orders = orderService.getOrdersByUserId(loggedInUser.getId());
+        return ResponseEntity.ok(OrderMapper.Instance.toDtoList(orders));
     }
 
     @PostMapping("/webhook")

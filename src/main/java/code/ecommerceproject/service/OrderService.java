@@ -114,4 +114,8 @@ public class OrderService {
 
         productService.updateQuantity(order.getOrderedProducts());
     }
+
+    public List<Order> getOrdersByUserId(final UUID userId) {
+        return orderRepository.findByUserId(userId);
+    }
 }
