@@ -112,6 +112,12 @@ public class OrderService {
     public void updateOrder(final String stripeSessionId) {
 
         final Order order = orderRepository.findByStripeSessionId(stripeSessionId);
+        if (order == null) {
+            throw new RuntimeException("Order not found");
+        }
+        if (order.getStatus() == OrderStatus.PAID) {
+            return; // In case of late stripe hooks
+        }
         order.setStatus(OrderStatus.PAID);
 
         productService.updateQuantity(order.getOrderedProducts());
