@@ -58,10 +58,32 @@ public class OrderController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/all-orders")
-    public ResponseEntity<List<OrderDto>> getAllOrders() {
+    public ResponseEntity<Page<AdminOrderDto>> getAllOrders(final Pageable pageable) {
 
-        final List<Order> orderEntities = orderService.getAllOrders();
-        return ResponseEntity.ok(OrderMapper.Instance.toDtoList(orderEntities));
+        final Page<Order> page = orderService.getAllOrders(pageable);
+        final Page<OrderDto> orderDtos = page.map(OrderMapper.Instance::toDto);
+        
+        final Page<AdminOrderDto> adminOrderDtos = orderDtos.map(orderDto -> {
+            final String email = orderDto.getUser().getEmail();
+            final String address = addressService.getAddressByUserId(orderDto.getUser().getId())
+                    .map(addr -> String.format("%s, %s, %s %s", 
+                            addr.getStreet(), 
+                            addr.getCity(), 
+                            addr.getCountry(), 
+                            addr.getZipCode()))
+                    .orElse("No address found");
+            
+            return AdminOrderDto.builder()
+                    .id(orderDto.getId())
+                    .status(orderDto.getStatus())
+                    .stripeSessionId(orderDto.getStripeSessionId())
+                    .orderedProducts(orderDto.getOrderedProducts())
+                    .email(email)
+                    .address(address)
+                    .build();
+        });
+        
+        return ResponseEntity.ok(adminOrderDtos);
 
     }
 

@@ -59,8 +59,8 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public Page<Order> getAllOrders(final Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
     public void deleteOrder(UUID id) {
