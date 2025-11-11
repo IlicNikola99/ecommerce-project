@@ -20,6 +20,8 @@ public class SecurityConfiguration {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    
+    private final String LOGIN_FAILURE_URL = "http://localhost:4200/login-failure";
 
 
     public SecurityConfiguration(CustomOAuth2UserService customOAuth2UserService, CustomOAuth2SuccessHandler customOAuth2SuccessHandler, JwtAuthenticationFilter jwtAuthenticationFilter) {
@@ -52,21 +54,20 @@ public class SecurityConfiguration {
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
                         .logoutSuccessHandler((request, response, authentication) -> {
-                            // Log the successful logout information
                             System.out.println("Successfully logged out");
-                            response.setStatus(200); // Ensure the response status is 200
-                            response.getWriter().write("Logout successful"); // Optional: Write success message
+                            response.setStatus(200); 
+                            response.getWriter().write("Logout successful"); 
                         })
                 )
 
                 .exceptionHandling(e -> e
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))  // Handle unauthorized access
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) 
                 )
                 .oauth2Login(oauth -> oauth
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
-                        .failureUrl("http://localhost:4200/login-failure") // Redirect to Angular app on failure
+                        .failureUrl(LOGIN_FAILURE_URL) // Redirect to Angular app on failure
                         .successHandler(customOAuth2SuccessHandler)
                         .failureHandler((request, response, exception) -> {
                             // Log the exception for debugging
