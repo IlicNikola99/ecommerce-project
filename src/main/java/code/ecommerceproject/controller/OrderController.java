@@ -17,12 +17,15 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -55,11 +58,57 @@ public class OrderController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/all-orders")
-    public ResponseEntity<List<OrderDto>> getAllOrders() {
+    public ResponseEntity<Page<AdminOrderDto>> getAllOrders(final Pageable pageable) {
 
-        final List<Order> orderEntities = orderService.getAllOrders();
-        return ResponseEntity.ok(OrderMapper.Instance.toDtoList(orderEntities));
+        final Page<Order> page = orderService.getAllOrders(pageable);
+        final Page<OrderDto> orderDtos = page.map(OrderMapper.Instance::toDto);
+        
+        final Page<AdminOrderDto> adminOrderDtos = orderDtos.map(orderDto -> {
+            final String email = orderDto.getUser().getEmail();
+            final String address = addressService.getAddressByUserId(orderDto.getUser().getId())
+                    .map(addr -> String.format("%s, %s, %s %s", 
+                            addr.getStreet(), 
+                            addr.getCity(), 
+                            addr.getCountry(), 
+                            addr.getZipCode()))
+                    .orElse("No address found");
+            
+            return AdminOrderDto.builder()
+                    .id(orderDto.getId())
+                    .status(orderDto.getStatus())
+                    .stripeSessionId(orderDto.getStripeSessionId())
+                    .orderedProducts(orderDto.getOrderedProducts())
+                    .email(email)
+                    .address(address)
+                    .build();
+        });
+        
+        return ResponseEntity.ok(adminOrderDtos);
 
+    }
+
+    @GetMapping("/{userId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") 
+    public ResponseEntity<Page<OrderDto>> getOrdersByUserId(@PathVariable UUID userId, Pageable pageable,
+                                                           org.springframework.security.core.Authentication authentication) {
+        if (!userService.checkUser(userId, authentication)) {
+            return ResponseEntity.status(403).build();
+        }
+    
+        final Page<Order> page = orderService.getOrdersByUserId(userId, pageable);  
+        final Page<OrderDto> mapped = page.map(OrderMapper.Instance::toDto);
+        return ResponseEntity.ok(mapped);
+    }  
+
+    @GetMapping("/authenticated")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") 
+    public ResponseEntity<Page<OrderDto>> getOrdersByAuthenticatedUser(org.springframework.security.core.Authentication authentication, Pageable pageable) {
+        final String email = (String) authentication.getPrincipal();
+        final User loggedInUser = userService.findUserByEmail(email);
+
+        final Page<Order> page = orderService.getOrdersByUserId(loggedInUser.getId(), pageable);
+        final Page<OrderDto> mapped = page.map(OrderMapper.Instance::toDto);
+        return ResponseEntity.ok(mapped);
     }
 
     @PostMapping("/webhook")

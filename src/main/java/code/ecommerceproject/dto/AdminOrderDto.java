@@ -3,6 +3,7 @@ package code.ecommerceproject.dto;
 import code.ecommerceproject.entity.OrderedProduct;
 import code.ecommerceproject.enums.OrderStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,17 +11,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDto {
+@Builder
+public class AdminOrderDto {
 
     private UUID id;
     private OrderStatus status;
     private String stripeSessionId;
     private Set<OrderedProduct> orderedProducts = new HashSet<>();
-    @JsonIgnore
-    private UserDto user;
+    private String email;
+    private String address;
 }

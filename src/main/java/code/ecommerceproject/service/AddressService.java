@@ -47,4 +47,8 @@ public class AddressService {
     public void deleteAddress(final UUID id) {
         addressRepository.deleteById(id);
     }
+
+    public Optional<Address> getAddressByUserId(final UUID userId) {
+        return addressRepository.findByUserId(userId);
+    }
 } 

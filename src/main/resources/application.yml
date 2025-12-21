@@ -63,5 +63,5 @@ jwt:
 
 stripe:
   webhook-secret: whsec_0984d41b27e102d35b9ba11b70bd5f54634a9fd195a23c23627794a67a0cd39f
-  secret-key: rk_test_51QrivNEKvRiokhn6vl36tEoXSyCmYohZzcFJHlD2XlcAfRp5WIr6tXJ9ANQuRSHKd5UW6Tv6GMCH5F0Clg6bqC1K00w8FKsllh
+  secret-key: ${STRIPE_SECRET_KEY}
   client-base-url: http://localhost:4200

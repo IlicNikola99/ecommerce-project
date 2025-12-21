@@ -25,6 +25,8 @@ import java.util.Map;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
+    private static final String FRONTEND_REDIRECT_URL = "http://localhost:4200/login-success";
+
     private final OAuth2AuthorizedClientService authorizedClientService;
     private final UserService userService;
     private final JwtUtil jwtUtil;
@@ -55,8 +57,9 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         session.setAttribute("googleToken", accessToken);
 
 
-        final String frontendRedirectUrl = "http://localhost:4200/login-success?token=" //TODO move this hardcode
-                + URLEncoder.encode(jwt, StandardCharsets.UTF_8) + "&email=" + URLEncoder.encode(userDto.getEmail(), StandardCharsets.UTF_8); //TODO replace this hardcode
+        final String frontendRedirectUrl = FRONTEND_REDIRECT_URL
+                + "?token=" + URLEncoder.encode(jwt, StandardCharsets.UTF_8)
+                + "&email=" + URLEncoder.encode(userDto.getEmail(), StandardCharsets.UTF_8);
         response.sendRedirect(frontendRedirectUrl);
     }
 }

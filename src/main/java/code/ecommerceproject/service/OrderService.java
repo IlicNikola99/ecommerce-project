@@ -6,6 +6,8 @@ import code.ecommerceproject.entity.*;
 import code.ecommerceproject.enums.OrderStatus;
 import code.ecommerceproject.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,8 +59,8 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public Page<Order> getAllOrders(final Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
     public void deleteOrder(UUID id) {
@@ -110,8 +112,18 @@ public class OrderService {
     public void updateOrder(final String stripeSessionId) {
 
         final Order order = orderRepository.findByStripeSessionId(stripeSessionId);
+        if (order == null) {
+            throw new RuntimeException("Order not found");
+        }
+        if (order.getStatus() == OrderStatus.PAID) {
+            return; // In case of late stripe hooks
+        }
         order.setStatus(OrderStatus.PAID);
 
         productService.updateQuantity(order.getOrderedProducts());
+    }
+
+    public Page<Order> getOrdersByUserId(final UUID userId, final Pageable pageable) {
+        return orderRepository.findByUserId(userId, pageable);
     }
 }
