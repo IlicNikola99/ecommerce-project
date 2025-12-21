@@ -22,9 +22,10 @@ public class StripeRunner implements ApplicationRunner {
 
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(
-                    "stripe", "listen", "--api-key", secretKey, "--forward-to", "http://localhost:8080/api/orders/webhook"
+                    "stripe", "listen", "--forward-to", "http://localhost:8080/api/orders/webhook"
             );
-            processBuilder.inheritIO(); // Redirects output to console
+            processBuilder.environment().put("STRIPE_API_KEY", secretKey);
+            processBuilder.inheritIO();
             processBuilder.start();
         } catch (IOException e) {
             e.printStackTrace();
